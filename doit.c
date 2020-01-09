@@ -8,10 +8,7 @@ void print_log(const char* log_msg, int level)
 		"WARNING",
 		"FATAL",
 	};
-//	printf("[%s]...[%s]",log_msg,err_list[level]);
 
-//#ifdef DEBUG
-//#define DEBUG
 	char* log_path = "log/filelog";
 	int fd = open(log_path, O_WRONLY|O_APPEND|O_CREAT, 0644);
 	
@@ -28,7 +25,7 @@ void print_log(const char* log_msg, int level)
 	strcat(buf,ti);
 	write(fd, buf, strlen(buf));
 	close(fd);
-//#endif
+
 }
 
 //按行读取内容
@@ -108,7 +105,7 @@ void bad_request(const char* path, const char* head, int sock)
 	//响应报头+空行
 	const char* status_line = head;
 	send(sock,status_line,strlen(status_line),0);
-	const char* content_type = "Content-Type:text/html;charset=ISO-8859-1\r\n";
+	const char* content_type = "Content-Type:text/html;charset=UTF-8\r\n";
 	send(sock,content_type,strlen(content_type),0);
 	send(sock, "\r\n", 2, 0);
 
@@ -121,10 +118,10 @@ void echo_errno(int sock, int err_code)
 	switch(err_code)
 	{
 		case 404:
-			bad_request("wwwroot/404.html", "HTTP/1.0 404 Not Found\r\n", sock);
+			bad_request("linux/404.html", "HTTP/1.0 404 Not Found\r\n", sock);
 			break;
 		case 503:
-			bad_request("wwwroot/503.html","HTTP/1.0 503 Server Unavailable\r\n",sock);
+			bad_request("linux/503.html","HTTP/1.0 503 Server Unavailable\r\n",sock);
 			break;
 		default:
 			break;
@@ -167,7 +164,7 @@ static int excu_cgi(int sock,const char* method, char* path,const char* query_st
 	//响应报头+空行
 	const char* status_line = "HTTP/1.0 200 OK\r\n";
 	send(sock, status_line, strlen(status_line), 0);
-	const char* content_type = "Content-Type:text/html;charset=ISO-8859-1\r\n";
+	const char* content_type = "Content-Type:text/html;charset=UTF-8\r\n";
 	send(sock, content_type, strlen(content_type), 0);
 	send(sock, "\r\n", 2, 0);
 
@@ -315,8 +312,8 @@ int handle(int sock)
 		}
 	}
 
-	//转换路径：/XX/YY/ZZ   -->   wwwroot/XX/YY/ZZ
-	sprintf(path,"wwwroot%s",url);
+	//转换路径：/XX/YY/ZZ   -->   linux/XX/YY/ZZ
+	sprintf(path,"linux%s",url);
 	if(path[strlen(path)-1] == '/')		//如果是一个目录就拼上默认主页
 	{
 		strcat(path,"index.html");
