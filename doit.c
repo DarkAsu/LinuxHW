@@ -75,7 +75,11 @@ static int echo_www(int sock, const char* path, ssize_t size)
 		echo_errno(sock,503);
 		ret = 8;
 	}
-
+	else
+	{
+		print_log("connected successfully", NORMAL);
+	}
+	
 	char line[SIZE*10];
 	//响应报头
 	sprintf(line, "HTTP/1.0 200 OK\r\n");

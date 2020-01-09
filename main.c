@@ -40,11 +40,11 @@ void Usage(const char* proc)
 	printf("%s [local_ip] [local_port]",proc);
 }
 
-void* accept_request(void* arg)
+int accept_request(void* arg)
 {
-	int sock = (int)arg;
+	int sock = *((int*)arg);
 	pthread_detach(pthread_self());
-	return (void*)handle(sock);
+	return handle(sock);
 }
 
 int main(int argc, char *argv[])
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 		}
 
 		pthread_t tid;
-		pthread_create(&tid, NULL, accept_request, (void*)sock);
+		pthread_create(&tid, NULL, (void*)accept_request, &sock);
 	}
 	close(listen_sock);
 	return 0;

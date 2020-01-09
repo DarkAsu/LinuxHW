@@ -14,6 +14,9 @@
 #include <assert.h>
 #include <string.h>
 #include <fcntl.h>
+#include <ctype.h>
+#include <sys/wait.h>
+
 
 #define NORMAL 0
 #define WARNING 1
@@ -23,7 +26,7 @@
 
 void Usage(const char* proc);
 void print_log(const char* log_msg, int level);
-
+pid_t waitpid(pid_t pid,int *status,int options);
 int handle(int fd);
 void echo_errno();
 
